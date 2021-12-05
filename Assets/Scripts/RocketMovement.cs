@@ -5,6 +5,7 @@ using UnityEngine;
 public class RocketMovement : MonoBehaviour
 {
     Rigidbody rb;
+    AudioSource audiosource;
 
     [SerializeField] float thrust = 1000f;
     [SerializeField] float rotationSpeed = 50f;
@@ -12,12 +13,16 @@ public class RocketMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audiosource = GetComponent<AudioSource>();
+
+        audiosource.Stop();
     }
 
     void Update()
     {
         ProcessThrust();
         ProcessRotation();
+        ProcessAudio();
     }
     
     void ProcessThrust()
@@ -43,6 +48,19 @@ public class RocketMovement : MonoBehaviour
         else if (right)
         {
             ApplyRotation(rotationSpeed);
+        }
+    }
+
+    void ProcessAudio()
+    {
+        bool spaceIsUp = Input.GetKeyUp(KeyCode.Space);
+        bool spaceIsDown = Input.GetKeyDown(KeyCode.Space);
+
+        if (spaceIsUp)
+        {
+            audiosource.Stop();
+        } else if (spaceIsDown && !audiosource.isPlaying) {
+            audiosource.Play();
         }
     }
 
