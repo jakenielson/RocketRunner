@@ -100,7 +100,11 @@ public class RocketMovement : MonoBehaviour
         {
             if (!space)
             {
-                audiosource.Stop();
+                if (!right)
+                {
+                    audiosource.Stop();
+                }
+
                 leftBoostParticles.Stop();
             }
         } else if (leftIsDown)
@@ -117,7 +121,11 @@ public class RocketMovement : MonoBehaviour
         {
             if (!space)
             {
-                audiosource.Stop();
+                if (!left)
+                {
+                    audiosource.Stop();
+                }
+                
                 rightBoostParticles.Stop();
             }
         } else if (rightIsDown)
