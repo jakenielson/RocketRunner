@@ -10,6 +10,8 @@ public class RocketMovement : MonoBehaviour
     [SerializeField] float thrust = 1000f;
     [SerializeField] float rotationSpeed = 50f;
     [SerializeField] AudioClip engineSound;
+    [SerializeField] ParticleSystem leftBoostParticles;
+    [SerializeField] ParticleSystem rightBoostParticles;
 
     void Start()
     {
@@ -23,7 +25,7 @@ public class RocketMovement : MonoBehaviour
     {
         ProcessThrust();
         ProcessRotation();
-        ProcessAudio();
+        ProcessEffects();
     }
     
     void ProcessThrust()
@@ -52,16 +54,80 @@ public class RocketMovement : MonoBehaviour
         }
     }
 
-    void ProcessAudio()
+    void ProcessEffects()
     {
         bool spaceIsUp = Input.GetKeyUp(KeyCode.Space);
         bool spaceIsDown = Input.GetKeyDown(KeyCode.Space);
+        bool space = Input.GetKey(KeyCode.Space);
+
+        bool leftIsUp = Input.GetKeyUp(KeyCode.A);
+        bool leftIsDown = Input.GetKeyDown(KeyCode.A);
+        bool left = Input.GetKey(KeyCode.A);
+
+        bool rightIsUp = Input.GetKeyUp(KeyCode.D);
+        bool rightIsDown = Input.GetKeyDown(KeyCode.D);
+        bool right = Input.GetKey(KeyCode.D);
 
         if (spaceIsUp)
         {
-            audiosource.Stop();
-        } else if (spaceIsDown && !audiosource.isPlaying) {
-            audiosource.PlayOneShot(engineSound);
+            if (!left)
+            {
+                leftBoostParticles.Stop();
+            }
+
+            if (!right)
+            {
+                rightBoostParticles.Stop();
+            }
+
+            if (!left && !right)
+            {
+                audiosource.Stop();
+            }
+        }
+        else if (spaceIsDown)
+        {
+            if (!audiosource.isPlaying)
+            {
+                audiosource.PlayOneShot(engineSound);
+            }
+
+            leftBoostParticles.Play();
+            rightBoostParticles.Play();
+        }
+
+        if (leftIsUp)
+        {
+            if (!space)
+            {
+                audiosource.Stop();
+                leftBoostParticles.Stop();
+            }
+        } else if (leftIsDown)
+        {
+            if (!audiosource.isPlaying)
+            {
+                audiosource.PlayOneShot(engineSound);
+            }
+
+            leftBoostParticles.Play();
+        }
+
+        if (rightIsUp)
+        {
+            if (!space)
+            {
+                audiosource.Stop();
+                rightBoostParticles.Stop();
+            }
+        } else if (rightIsDown)
+        {
+            if (!audiosource.isPlaying)
+            {
+                audiosource.PlayOneShot(engineSound);
+            }
+            
+            rightBoostParticles.Play();
         }
     }
 
