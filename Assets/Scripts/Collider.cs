@@ -5,6 +5,8 @@ public class Collider : MonoBehaviour
 {
     [SerializeField] AudioClip crashSound;
     [SerializeField] AudioClip winSound;
+    [SerializeField] ParticleSystem crashParticles;
+    [SerializeField] ParticleSystem winParticles;
     AudioSource audiosource;
 
     bool isTransitioning = false;
@@ -46,6 +48,7 @@ public class Collider : MonoBehaviour
         DisableMovement();
         audiosource.Stop();
         audiosource.PlayOneShot(winSound);
+        winParticles.Play();
         Invoke("LoadNextLevel", 1f);
     }
 
@@ -55,6 +58,7 @@ public class Collider : MonoBehaviour
         DisableMovement();
         audiosource.Stop();
         audiosource.PlayOneShot(crashSound);
+        crashParticles.Play();
         Invoke("ReloadLevel", 1f);
     }
 
