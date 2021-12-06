@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Collider : MonoBehaviour
 {
@@ -13,8 +14,14 @@ public class Collider : MonoBehaviour
                 Debug.Log("You beat the level!");
                 break;
             default:
-                Debug.Log("You took damage!");
+                ReloadLevel();
                 break;
         }
+    }
+
+    void ReloadLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 }
