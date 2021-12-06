@@ -8,10 +8,9 @@ public class Collider : MonoBehaviour
         switch (other.gameObject.tag)
         {
             case "Friendly":
-                Debug.Log("You're ok!");
                 break;
             case "Finish":
-                Debug.Log("You beat the level!");
+                LoadNextLevel();
                 break;
             default:
                 ReloadLevel();
@@ -23,5 +22,16 @@ public class Collider : MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
+    }
+
+    void LoadNextLevel()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings) {
+            nextSceneIndex = 0;
+        }
+
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }
