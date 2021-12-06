@@ -3,6 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class Collider : MonoBehaviour
 {
+    [SerializeField] AudioClip crashSound;
+    [SerializeField] AudioClip winSound;
+    AudioSource audiosource;
+
+    void Start()
+    {
+        audiosource = GetComponent<AudioSource>();
+        audiosource.Stop();
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         switch (other.gameObject.tag)
@@ -26,12 +36,14 @@ public class Collider : MonoBehaviour
     void StartWinSequence()
     {
         DisableMovement();
+        audiosource.PlayOneShot(winSound);
         Invoke("LoadNextLevel", 1f);
     }
 
     void StartCrashSequence()
     {
         DisableMovement();
+        audiosource.PlayOneShot(crashSound);
         Invoke("ReloadLevel", 1f);
     }
 

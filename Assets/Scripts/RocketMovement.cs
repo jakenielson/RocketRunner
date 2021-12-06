@@ -9,6 +9,7 @@ public class RocketMovement : MonoBehaviour
 
     [SerializeField] float thrust = 1000f;
     [SerializeField] float rotationSpeed = 50f;
+    [SerializeField] AudioClip engineSound;
 
     void Start()
     {
@@ -60,7 +61,7 @@ public class RocketMovement : MonoBehaviour
         {
             audiosource.Stop();
         } else if (spaceIsDown && !audiosource.isPlaying) {
-            audiosource.Play();
+            audiosource.PlayOneShot(engineSound);
         }
     }
 
