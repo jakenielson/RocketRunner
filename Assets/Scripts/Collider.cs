@@ -10,12 +10,29 @@ public class Collider : MonoBehaviour
             case "Friendly":
                 break;
             case "Finish":
-                LoadNextLevel();
+                StartWinSequence();
                 break;
             default:
-                ReloadLevel();
+                StartCrashSequence();
                 break;
         }
+    }
+
+    void DisableMovement()
+    {
+        GetComponent<RocketMovement>().enabled = false;
+    }
+
+    void StartWinSequence()
+    {
+        DisableMovement();
+        Invoke("LoadNextLevel", 1f);
+    }
+
+    void StartCrashSequence()
+    {
+        DisableMovement();
+        Invoke("ReloadLevel", 1f);
     }
 
     void ReloadLevel()
