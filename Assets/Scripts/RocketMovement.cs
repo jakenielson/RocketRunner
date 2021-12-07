@@ -13,6 +13,18 @@ public class RocketMovement : MonoBehaviour
     [SerializeField] ParticleSystem leftBoostParticles;
     [SerializeField] ParticleSystem rightBoostParticles;
 
+    bool spaceIsUp;
+    bool spaceIsDown;
+    bool space;
+
+    bool leftIsUp;
+    bool leftIsDown;
+    bool left;
+
+    bool rightIsUp;
+    bool rightIsDown;
+    bool right;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -23,27 +35,39 @@ public class RocketMovement : MonoBehaviour
 
     void Update()
     {
+        ProcessInput();
         ProcessThrust();
         ProcessRotation();
         ProcessEffects();
     }
+
+    void ProcessInput()
+    {
+        space = Input.GetKey(KeyCode.Space);
+        spaceIsUp = Input.GetKeyUp(KeyCode.Space);
+        spaceIsDown = Input.GetKeyDown(KeyCode.Space);
+
+        left = Input.GetKey(KeyCode.A);
+        leftIsUp = Input.GetKeyUp(KeyCode.A);
+        leftIsDown = Input.GetKeyDown(KeyCode.A);
+
+        right = Input.GetKey(KeyCode.D);
+        rightIsUp = Input.GetKeyUp(KeyCode.D);
+        rightIsDown = Input.GetKeyDown(KeyCode.D);
+    }
     
     void ProcessThrust()
     {
-        bool space = Input.GetKey(KeyCode.Space);
-        Vector3 vector = Vector3.up * thrust * Time.deltaTime;
+        Vector3 thrustVector = Vector3.up * thrust * Time.deltaTime;
 
         if (space)
         {
-            rb.AddRelativeForce(vector);
+            rb.AddRelativeForce(thrustVector);
         }
     }
 
     void ProcessRotation()
     {
-        bool left = Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D);
-        bool right = Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A);
-
         if (left)
         {
             ApplyRotation(-rotationSpeed);
@@ -56,95 +80,122 @@ public class RocketMovement : MonoBehaviour
 
     void ProcessEffects()
     {
-        bool spaceIsUp = Input.GetKeyUp(KeyCode.Space);
-        bool spaceIsDown = Input.GetKeyDown(KeyCode.Space);
-        bool space = Input.GetKey(KeyCode.Space);
-
-        bool leftIsUp = Input.GetKeyUp(KeyCode.A);
-        bool leftIsDown = Input.GetKeyDown(KeyCode.A);
-        bool left = Input.GetKey(KeyCode.A);
-
-        bool rightIsUp = Input.GetKeyUp(KeyCode.D);
-        bool rightIsDown = Input.GetKeyDown(KeyCode.D);
-        bool right = Input.GetKey(KeyCode.D);
-
-        if (spaceIsUp)
-        {
-            if (!left)
-            {
-                leftBoostParticles.Stop();
-            }
-
-            if (!right)
-            {
-                rightBoostParticles.Stop();
-            }
-
-            if (!left && !right)
-            {
-                audiosource.Stop();
-            }
-        }
-        else if (spaceIsDown)
-        {
-            if (!audiosource.isPlaying)
-            {
-                audiosource.PlayOneShot(engineSound);
-            }
-
-            leftBoostParticles.Play();
-            rightBoostParticles.Play();
-        }
-
-        if (leftIsUp)
-        {
-            if (!space)
-            {
-                if (!right)
-                {
-                    audiosource.Stop();
-                }
-
-                leftBoostParticles.Stop();
-            }
-        } else if (leftIsDown)
-        {
-            if (!audiosource.isPlaying)
-            {
-                audiosource.PlayOneShot(engineSound);
-            }
-
-            leftBoostParticles.Play();
-        }
-
-        if (rightIsUp)
-        {
-            if (!space)
-            {
-                if (!left)
-                {
-                    audiosource.Stop();
-                }
-                
-                rightBoostParticles.Stop();
-            }
-        } else if (rightIsDown)
-        {
-            if (!audiosource.isPlaying)
-            {
-                audiosource.PlayOneShot(engineSound);
-            }
-            
-            rightBoostParticles.Play();
-        }
+        MainBoostEffect();
+        LeftBoostEffect();
+        RightBoostEffect();
     }
 
     void ApplyRotation(float rotationScalar)
     {
-        Vector3 vector = Vector3.forward * rotationScalar * Time.deltaTime;
+        Vector3 rotationVector = Vector3.forward * rotationScalar * Time.deltaTime;
 
         rb.freezeRotation = true;
-        transform.Rotate(vector);
+        transform.Rotate(rotationVector);
         rb.freezeRotation = false;
+    }
+
+    private void MainBoostEffect()
+    {
+        if (spaceIsUp)
+        {
+            StopMainBoost();
+        }
+        else if (spaceIsDown)
+        {
+            StartMainBoost();
+        }
+    }
+
+    private void LeftBoostEffect()
+    {
+        if (leftIsUp && !space)
+        {
+            StopLeftBoost();
+        }
+        else if (leftIsDown)
+        {
+            StartLeftBoost();
+        }
+    }
+
+    private void RightBoostEffect()
+    {
+        if (rightIsUp && !space)
+        {
+            StopRightBoost();
+        }
+        else if (rightIsDown)
+        {
+            StartRightBoost();
+        }
+    }
+
+    private void StopMainBoost()
+    {
+        if (!left)
+        {
+            leftBoostParticles.Stop();
+        }
+
+        if (!right)
+        {
+            rightBoostParticles.Stop();
+        }
+
+        if (!left && !right)
+        {
+            audiosource.Stop();
+        }
+    }
+
+    private void StartMainBoost()
+    {
+        if (!audiosource.isPlaying)
+        {
+            audiosource.PlayOneShot(engineSound);
+        }
+
+        leftBoostParticles.Play();
+        rightBoostParticles.Play();
+    }
+
+    private void StopLeftBoost()
+    {
+        if (!right)
+        {
+            audiosource.Stop();
+        }
+
+        leftBoostParticles.Stop();
+    }
+
+    private void StartLeftBoost()
+    {
+        if (!audiosource.isPlaying)
+        {
+            audiosource.PlayOneShot(engineSound);
+        }
+
+        leftBoostParticles.Play();
+    }
+
+    private void StopRightBoost()
+    {
+        if (!left)
+        {
+            audiosource.Stop();
+        }
+
+        rightBoostParticles.Stop();
+    }
+
+    private void StartRightBoost()
+    {
+        if (!audiosource.isPlaying)
+        {
+            audiosource.PlayOneShot(engineSound);
+        }
+
+        rightBoostParticles.Play();
     }
 }
