@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thrust: 1000
   rotationSpeed: 50
-  engineSound: {fileID: 8300000, guid: 8112d8c3946ad4f1b9b9f1ae10824ade, type: 3}
+  engineSound: {fileID: 8300000, guid: 075f2a4ce465b499fa99f8aa9dec1bdd, type: 3}
   leftBoostParticles: {fileID: 4507902730967916030}
   rightBoostParticles: {fileID: 5386847435579854548}
 --- !u!54 &1060267446623139360
