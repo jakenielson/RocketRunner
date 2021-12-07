@@ -41,7 +41,7 @@ public class RocketMovement : MonoBehaviour
         ProcessEffects();
     }
 
-    void ProcessInput()
+    private void ProcessInput()
     {
         space = Input.GetKey(KeyCode.Space);
         spaceIsUp = Input.GetKeyUp(KeyCode.Space);
@@ -56,7 +56,7 @@ public class RocketMovement : MonoBehaviour
         rightIsDown = Input.GetKeyDown(KeyCode.D);
     }
     
-    void ProcessThrust()
+    private void ProcessThrust()
     {
         Vector3 thrustVector = Vector3.up * thrust * Time.deltaTime;
 
@@ -66,7 +66,7 @@ public class RocketMovement : MonoBehaviour
         }
     }
 
-    void ProcessRotation()
+    private void ProcessRotation()
     {
         if (left)
         {
@@ -78,14 +78,14 @@ public class RocketMovement : MonoBehaviour
         }
     }
 
-    void ProcessEffects()
+    private void ProcessEffects()
     {
         MainBoostEffect();
         LeftBoostEffect();
         RightBoostEffect();
     }
 
-    void ApplyRotation(float rotationScalar)
+    private void ApplyRotation(float rotationScalar)
     {
         Vector3 rotationVector = Vector3.forward * rotationScalar * Time.deltaTime;
 

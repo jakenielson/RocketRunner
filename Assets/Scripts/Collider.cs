@@ -9,6 +9,7 @@ public class Collider : MonoBehaviour
     [SerializeField] ParticleSystem winParticles;
     AudioSource audiosource;
 
+    bool isActive = true;
     bool isTransitioning = false;
 
     void Start()
@@ -19,7 +20,7 @@ public class Collider : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning)
+        if (isTransitioning || !isActive)
         {
             return;
         }
@@ -69,7 +70,7 @@ public class Collider : MonoBehaviour
         isTransitioning = false;
     }
 
-    void LoadNextLevel()
+    public void LoadNextLevel()
     {
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
 
@@ -80,5 +81,10 @@ public class Collider : MonoBehaviour
 
         SceneManager.LoadScene(nextSceneIndex);
         isTransitioning = false;
+    }
+
+    public void ToggleActive()
+    {
+        isActive = !isActive;
     }
 }
