@@ -13,17 +13,17 @@ public class RocketMovement : MonoBehaviour
     [SerializeField] ParticleSystem leftBoostParticles;
     [SerializeField] ParticleSystem rightBoostParticles;
 
+    bool space;
     bool spaceIsUp;
     bool spaceIsDown;
-    bool space;
 
+    bool left;
     bool leftIsUp;
     bool leftIsDown;
-    bool left;
 
+    bool right;
     bool rightIsUp;
     bool rightIsDown;
-    bool right;
 
     void Start()
     {
